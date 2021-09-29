@@ -23,7 +23,13 @@ const ERRO_MAXLENGHT= "Não foi possivel realizar a operação, pois a quantidad
 
 // Mensagens de aceitação e validação de dados no BD
 const BD_MSG_INSERIR = "Registro salvo com sucesso do banco de dados!";
-const BD_MSG_ERRO = "ERRO: Não foi possivel manipular os dados no Banco de dados!!!";   
+const BD_MSG_EXCLUIR = "
+                    <script> 
+                        alert('Registro excluido com sucesso do Banco de Dados'); 
+                        window.location.href='../index.php';
+                    </script>";
+const BD_MSG_ERRO = "ERRO: Não foi possivel manipular os dados no Banco de dados!!!";  
+
 
 
 

@@ -150,8 +150,13 @@
                     <td class="tblColunas registros"><?=$rsClientes['celular']?></td>
                     <td class="tblColunas registros"><?=$rsClientes['email']?></td>
                     <td class="tblColunas registros">
-                        <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
-                        <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
+                        
+                        <img src="img/edit.png" alt="Editar" title="Editar" class="editar"> 
+                        
+                       <a onclick="return confirm('Tem certeza que deseja excluir?');" href="controles/excluiDadosClientes.php?id=<?=$rsClientes['idcliente']?>"> 
+                            <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
+                        </a>   
+                        
                         <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">
                     </td>
                 </tr>
