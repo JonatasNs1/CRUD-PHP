@@ -82,6 +82,7 @@ input[type=email]:hover{
     width: 90%;
     height: 100px;
     resize: none;
+
 }
 .enviar input{
     width: 150px;

@@ -1,4 +1,16 @@
 <?php
+    //ativa a utilização de variaveis de sessão
+      session_start();
+
+//declaração de variavel para o formulario/ edidar daados
+    $nome =(string) null;
+    $telefone =(string) null;
+    $cpf =(string) null;
+    $rg =(string) null;
+    $celular = (string) null;
+    $email = (string) null;
+    $obs = (string) null;
+    $id = (int) 0;
 
     // import do arquivo de configuração de variaveis e constantes
     require_once('functions/config.php');
@@ -8,7 +20,21 @@
 
     require_once(SRC. 'controles/exibirDadosClientes.php');
 
-    
+  if(isset($_SESSION['cliente'])) //edidar daados
+  {
+         $id = $_SESSION['cliente']['idcliente'];
+      $nome = $_SESSION['cliente']['nome'];
+       $telefone = $_SESSION['cliente']['telefone'];
+        $cpf = $_SESSION['cliente']['cpf'];
+      $rg = $_SESSION['cliente']['rg'];
+      $celular =$_SESSION['cliente']['celular'];
+      $email = $_SESSION['cliente']['email'];
+      $obs = $_SESSION['cliente']['obs'];
+      
+      //elimina um objeto, variavel da memoria edidar daados
+      unset($_SESSION['cliente']);
+  }
+    //var_dump($_SESSION['cliente']);
 
 
 ?>
@@ -58,7 +84,7 @@
                             <label> Nome: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="text" name="txtNome" value="" placeholder="Digite seu Nome" maxlength="100">
+                            <input type="text" name="txtNome" value="<?=$nome?>" placeholder="Digite seu Nome" maxlength="100">
                         </div>
                     </div>
                     
@@ -67,7 +93,7 @@
                             <label> RG: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="text" name="txtRg" value="" maxlength="20">
+                            <input type="text" name="txtRg" value="<?=$rg?>" maxlength="20">
                         </div>
                     </div>
                     
@@ -76,7 +102,7 @@
                             <label> CPF: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="text" name="txtCpf" value="" maxlength="20">
+                            <input type="text" name="txtCpf" value="<?=$cpf?>" maxlength="20">
                         </div>
                     </div>
                     
@@ -85,7 +111,7 @@
                             <label> Telefone: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="tel" name="txtTelefone" value="" maxlength="16">
+                            <input type="tel" name="txtTelefone" value="<?=$telefone?>" maxlength="16">
                         </div>
                     </div>
                     
@@ -95,7 +121,7 @@
                             <label> Celular: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="tel" name="txtCelular" value="" maxlength="17">
+                            <input type="tel" name="txtCelular" value="<?=$celular?>" maxlength="17">
                         </div>
                     </div>
                     
@@ -104,7 +130,7 @@
                             <label> Email: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="email" name="txtEmail" value="" maxlength="60">
+                            <input type="email" name="txtEmail" value="<?=$email?>" maxlength="60">
                         </div>
                     </div>
                     
@@ -113,7 +139,7 @@
                             <label> Observações: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <textarea name="txtObs" cols="50" rows="7"></textarea>
+                            <textarea name="txtObs" cols="50" rows="7"><?=$obs?></textarea>
                         </div>
                     </div>
                     
@@ -150,8 +176,10 @@
                     <td class="tblColunas registros"><?=$rsClientes['celular']?></td>
                     <td class="tblColunas registros"><?=$rsClientes['email']?></td>
                     <td class="tblColunas registros">
-                        
-                        <img src="img/edit.png" alt="Editar" title="Editar" class="editar"> 
+                        <a href="controles/editaDadosClientes.php?id=<?=$rsClientes['idcliente']?>">
+                          <img src="img/edit.png" alt="Editar" title="Editar" class="editar"> 
+                        </a>
+                      
                         
                        <a onclick="return confirm('Tem certeza que deseja excluir?');" href="controles/excluiDadosClientes.php?id=<?=$rsClientes['idcliente']?>"> 
                             <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
