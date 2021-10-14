@@ -11,6 +11,10 @@
     $email = (string) null;
     $obs = (string) null;
     $id = (int) 0;
+    // essa variavel $modo(modo salvar, modo atualizar) sera utilizada para definir o modo de manipulação com o banco de dados
+    //(se ela for salvar= sera feito o insert
+    //se ela for atualizar = sera feito o update) cria na hora que for fazer a atualizar
+    $modo = (string) "Salvar"; 
 
     // import do arquivo de configuração de variaveis e constantes
     require_once('functions/config.php');
@@ -20,16 +24,18 @@
 
     require_once(SRC. 'controles/exibirDadosClientes.php');
 
+    // esse if verifica a existencia da variavel sessão que usamos para trazer os dados para o editar
   if(isset($_SESSION['cliente'])) //edidar daados
   {
-         $id = $_SESSION['cliente']['idcliente'];
+      $id = $_SESSION['cliente']['idcliente'];
       $nome = $_SESSION['cliente']['nome'];
-       $telefone = $_SESSION['cliente']['telefone'];
-        $cpf = $_SESSION['cliente']['cpf'];
+      $telefone = $_SESSION['cliente']['telefone'];
+      $cpf = $_SESSION['cliente']['cpf'];
       $rg = $_SESSION['cliente']['rg'];
       $celular =$_SESSION['cliente']['celular'];
       $email = $_SESSION['cliente']['email'];
       $obs = $_SESSION['cliente']['obs'];
+      $modo = "Atualizar"; 
       
       //elimina um objeto, variavel da memoria edidar daados
       unset($_SESSION['cliente']);
@@ -77,7 +83,15 @@
             -->
             <div id="cadastroInformacoes">
         
-                <form action="controles/recebeDadosClientes.php" name="frmCadastro" method="post" >
+                <!-- 
+                    Adicionando o $modo e o id no action & - concatena para criar mais um elemento no html
+
+                    As variaveis modo e id, foram utilizadas no action do form, são responsaveis por encaminhar para a pagina recebeDadosClientes.php duas informações:
+                    modo - que é responsavel por definir se é para inserir ou atualizar 
+                    id - que é responsavel por identificar o registro a ser utilizado no BD
+
+                -->
+                <form action="controles/recebeDadosClientes.php?modo=<?=$modo?>&id=<?=$id?>" name="frmCadastro" method="post" >
                    
                     <div class="campos">
                         <div class="cadastroInformacoesPessoais">
@@ -145,7 +159,7 @@
                     
                     <div class="enviar">
                         <div class="enviar">
-                            <input type="submit" name="btnEnviar" value="Salvar">
+                            <input type="submit" name="btnEnviar" value="<?=$modo?>">
                         </div>
                     </div>
                     

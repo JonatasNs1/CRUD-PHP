@@ -19,11 +19,12 @@ $idCliente = $_GET['id'];
 
 $dadosCliente = buscar($idCliente); // tirando a função de dentro do if e colocando em uma variavel, chama a funcao para buscar o id do cliente
 //5 passo- chamando a função para buscar e encaminha o id que será localizado no bd
+//converte o resultado do bd em
 if($rsCliente=mysqli_fetch_assoc($dadosCliente)){
    // session_start();- Ativa a utilização de variaveis de sessão, (são variaveis) globais
     session_start();
     
-    //'cliente' - é nome da variavel, criamos uma variavel de seção oara guardar o array com os dados do cliente que retornou do bd
+    //'cliente' - é nome da variavel, criamos uma variavel de seção para guardar o array com os dados do cliente que retornou do bd
     $_SESSION['cliente'] = $rsCliente;
     
     //header é como se fosse o href, chamando o index

@@ -14,6 +14,8 @@ require_once('../functions/config.php');
 //import do arquivo para inserir no banco de dados
 require_once(SRC .'bd/inserirCliente.php');
 
+require_once(SRC .'bd/atualizarCliente.php');
+
     //Declaração de variaveis
     $nome = (string) null;
     $rg = (string) null;
@@ -22,6 +24,13 @@ require_once(SRC .'bd/inserirCliente.php');
     $celular = (string) null;
     $email = (string) null;
     $obs = (string) null;
+
+    if(isset($_GET['id'])){ // validacao para saber se o id do registro ta chegando pela URL(modo para atualizar o registro)
+         $id = (int) $_GET['id'];
+    }
+   else{
+       $id = (int) 0; // esse id será utilizado somente para o editar
+   } 
 
     
 
@@ -65,8 +74,15 @@ require_once(SRC .'bd/inserirCliente.php');
                 "celular" =>$celular,
                 "email" =>$email,
                 "obs" =>$obs,
+                "id" =>$id
                 
             );
+            
+            // fazer o if na hora que for fazer o atualizar
+            //validacao para saber se é para inserir um novo registro ou se é para atualizar um registro existente no bd
+            if(strtoupper($_GET['modo']) == 'SALVAR'){
+                
+           
             //chama a função inserir do arquivo inserirCliente.php, e encaminha o array com os dados do cliente.
            if (inserir($cliente)) //tratamento para ver se os dados chegaram no banco
                 echo ("
@@ -82,6 +98,26 @@ require_once(SRC .'bd/inserirCliente.php');
                          window.history.back();
                     </script>
                 ");
+            }elseif(strtoupper($_GET['modo']) == 'ATUALIZAR')//logica para o atualizar
+            { 
+                //  editar($cliente);
+                
+                if(editar($cliente))
+                     echo ("
+                        <script>
+                            alert('". BD_MSG_INSERIR ."');
+                            window.location.href = '../index.php';
+                            </script>
+                    " );
+                    else
+                        echo ("
+                            <script>
+                            alert('". BD_MSG_ERRO ."');
+                            window.history.back();
+                            </script>
+                        ");
+                
+            }
         }
     
         

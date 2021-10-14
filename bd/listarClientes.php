@@ -1,6 +1,6 @@
 <?php
     /********************************************************************************
-        Objetivo: Listar todos os dados de Clientes do Banco de dados 
+        Objetivo: Listar na tela todos os dados de Clientes do Banco de dados 
         data:23/09/2021
         Autor: Jonatas Santos
 
