@@ -16,6 +16,9 @@ require_once(SRC .'bd/inserirCliente.php');
 
 require_once(SRC .'bd/atualizarCliente.php');
 
+//import do arquivo que faz o upload de imagens para o servidor
+require_once(SRC.'functions/upload.php');
+
     //Declaração de variaveis
     $nome = (string) null;
     $rg = (string) null;
@@ -24,6 +27,9 @@ require_once(SRC .'bd/atualizarCliente.php');
     $celular = (string) null;
     $email = (string) null;
     $obs = (string) null;
+    $idEstado = (int) null; // 5 passo, para o tbl estado
+
+    $foto = (string) null; // variavel criada guardar o nome da foto
 
     if(isset($_GET['id'])){ // validacao para saber se o id do registro ta chegando pela URL(modo para atualizar o registro)
          $id = (int) $_GET['id'];
@@ -45,7 +51,15 @@ require_once(SRC .'bd/atualizarCliente.php');
         $celular = $_POST['txtCelular'];
         $email = $_POST['txtEmail'];
         $obs = $_POST['txtObs'];
-        
+        $idEstado = $_POST['sltEstado']; //6 passo para o tbl estado
+        // var_dump($_FILES['fleFoto']); //teste
+
+        $foto = uploadFile($_FILES['fleFoto']); // chamando a função que faz o upload de um arquivo
+        // echo($foto);
+        // die;
+       
+        // die;  // die - serve para parar a execução do código do apache
+
         //Validação de campos obrigatórios
     if($nome == null || $rg == null || $cpf == null)
     {
@@ -74,7 +88,9 @@ require_once(SRC .'bd/atualizarCliente.php');
                 "celular" =>$celular,
                 "email" =>$email,
                 "obs" =>$obs,
-                "id" =>$id
+                "id" =>$id,
+                "idEstado" => $idEstado, // 7 passo para o tbl estado
+                "foto" => $foto
                 
             );
             

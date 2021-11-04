@@ -9,6 +9,7 @@
     ******************************************************************************/
 
 //import do arquivo conexão com o banco de dados
+// 8 passo do tbl estado, adicionando o idEstado
 require_once('../bd/conexaoMysql.php');
 
     function inserir($arrayCliente)
@@ -22,8 +23,10 @@ require_once('../bd/conexaoMysql.php');
             telefone,
             celular,
             email,
-            obs
-            
+            obs,
+            idEstado,
+            foto
+
             ) 
             values
             (
@@ -33,7 +36,9 @@ require_once('../bd/conexaoMysql.php');
                 '".$arrayCliente['telefone']."', 
                 '".$arrayCliente['celular']."',
                 '".$arrayCliente['email']."',
-                '".$arrayCliente['obs']."'
+                '".$arrayCliente['obs']."',
+                 ".$arrayCliente['idEstado'].",
+                 '".$arrayCliente['foto']."'
             )
             ";
        

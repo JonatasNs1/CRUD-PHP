@@ -11,6 +11,10 @@
     $email = (string) null;
     $obs = (string) null;
     $id = (int) 0;
+    //variaveis para trazer os valores do Estado para a edição
+    $idEstado = (int) null; //10 passo do tblEstado
+    $sigla = (string) "Selecione um Item"; //11 passo do tblEstado
+
     // essa variavel $modo(modo salvar, modo atualizar) sera utilizada para definir o modo de manipulação com o banco de dados
     //(se ela for salvar= sera feito o insert
     //se ela for atualizar = sera feito o update) cria na hora que for fazer a atualizar
@@ -24,8 +28,12 @@
 
     require_once(SRC. 'controles/exibirDadosClientes.php');
 
+
+    // 3 arquivo para ser criado, para o tblestados, import do arquivo que lista todos os estados do bd
+    require_once(SRC. 'controles/listarDadosEstados.php');
+
     // esse if verifica a existencia da variavel sessão que usamos para trazer os dados para o editar
-  if(isset($_SESSION['cliente'])) //edidar daados
+  if(isset($_SESSION['cliente'])) //edidar daados, tirando da session e colocando em variaveis locais
   {
       $id = $_SESSION['cliente']['idcliente'];
       $nome = $_SESSION['cliente']['nome'];
@@ -35,6 +43,8 @@
       $celular =$_SESSION['cliente']['celular'];
       $email = $_SESSION['cliente']['email'];
       $obs = $_SESSION['cliente']['obs'];
+      $idEstado = $_SESSION['cliente']['idEstado'];//11 passo do tblEstado
+      $sigla = $_SESSION['cliente'] ['sigla'];//12 passo do tblEstado
       $modo = "Atualizar"; 
       
       //elimina um objeto, variavel da memoria edidar daados
@@ -50,9 +60,60 @@
         <meta charset="UTF-8">
         <title> Cadastro </title>
         <link rel="stylesheet" type="text/css" href="style/style.css">
+        <script src="js/jquery.js" ></script>
+        
+            <!-- Teste, ready/ evento, elemento que vc quer(document) a (.ready, ler o navegador)ação(ready) e dps a função
 
+                1- passo para criar o modal
+-->
+        <script>
+            $(document).ready(function(){
+                //Alterando uma propriedade de css ao carregar da pagina
+                $('#containerModal').css('display','none');
+//                alert('teste');
+                //Abre a modal
+               $('.pesquisar').click(function(){
+//                    alert('teste');
+                   $('#containerModal').slideToggle(1000); // abrir o elemento
+                   
+                   
+                   let idCliente = $(this).data('id');
+//                   alert(idCliente);
+                   //resgatando o id, this(aquele elemento que eu cliquei) chamando a variavel data atributo
+                   //ajax- realiza uma requisiçaõ para consumir dados de uma outra pagina
+                   $.ajax({
+                        type: "GET", // tipo de requisiçaõ (get, post, put, etc)
+                       url:  "visualizarDados.php", //url da página que será consumida
+                      data: {id:idCliente}, // criando uma variavel chamando id, que ira levar o idCliente que nós resgatamos, recebe o id do cliente que foi adicionado pelo dara atributo html
+                       success: function(dados) { //se a requisição der certo, iremos receber o conteudo na variavel dados
+                       
+                           $('#modal').html(dados); //Exibe dentro da div Modal
+                       }
+                      
+                  }); // ajax - permite manipular arquivos externos, precisa passar a requisiçaõ para ele, get ou post, success como se fosse um if, argumento (dados) pode ser qualquer nome
+                   //get - pegar alguma coisa, consultar algo no banco de dados e trazendo para ca (buscar e trazer)
+                   // Post -  se preciso pegar algo da minha pagina para enviar para alguma coisa(bd) (pegar dados do seu arquivo e mandar para outro lugar)
+               });
+                
+                //Fecha o modal
+                $('#fecharModal').click(function(){
+                   $('#containerModal').fadeOut(); 
+                });
+            });
+            
+        
+        </script>
     </head>
     <body>
+        
+        <div id="containerModal">
+            <span id="fecharModal"> Fechar</span>
+            <div id="modal">
+                
+            </div>
+        
+        </div>
+        
         <div id="cadastro"> 
             <div id="cadastroTitulo"> 
                 <h1> Cadastro de Contatos </h1>
@@ -91,8 +152,14 @@
                     id - que é responsavel por identificar o registro a ser utilizado no BD
 
                 -->
-                <form action="controles/recebeDadosClientes.php?modo=<?=$modo?>&id=<?=$id?>" name="frmCadastro" method="post" >
+
+                <!-- 2 passo enctype="multipart/form-data" - é obrigatório ser utilizado quando for trabalhar com imagens
+                        obs: (Para trabalhar com a input type="file") é obrigatório utilizar o metódo POST
+                -->
+                <form enctype="multipart/form-data" action="controles/recebeDadosClientes.php?modo=<?=$modo?>&id=<?=$id?>" name="frmCadastro" method="post" >
                    
+                   
+                    
                     <div class="campos">
                         <div class="cadastroInformacoesPessoais">
                             <label> Nome: </label>
@@ -100,6 +167,42 @@
                         <div class="cadastroEntradaDeDados">
                             <input type="text" name="txtNome" value="<?=$nome?>" placeholder="Digite seu Nome" maxlength="100">
                         </div>
+                    </div>
+                    
+                    <!-- Primeiro passo -->
+                    <div class="campos">
+                        <div class="cadastroInformacoesPessoais">
+                            <label> Foto: </label>
+                        </div>
+                        <div class="cadastroEntradaDeDados">
+                            <input type="file" name="fleFoto" accept="image/jpeg, image/jpg, image/png">
+                        </div>
+                    </div>
+                    
+                     <div class="campos">
+                        <div class="cadastroInformacoesPessoais">
+                            <label> Estados: </label>
+                        </div>
+                          <div class="cadastroEntradaDeDados">
+                        <select name="sltEstado">
+                                    <!--13 passo no tblEstado-->
+                                <option selected value="<?=$idEstado?>"> <?=$sigla?>  </option> 
+                            <?php 
+                                // 4 passo- para fazer o tblEstados
+                                    //chama a função que vai buscar todos os estados no banco
+                                   $listEstados= exibirEstados();
+                                    
+                                    //repetição para exibir os dados do BD
+                                    while($rsEstados = mysqli_fetch_assoc($listEstados))
+                                    {
+                                        ?>
+                                            <option value="<?=$rsEstados['idEstado']?>"> <?=$rsEstados['sigla']?></option>
+                                        <?php
+                                    }
+                                    
+                            ?>
+                            </select>
+                         </div>  
                     </div>
                     
                      <div class="campos">
@@ -169,7 +272,7 @@
         <div id="consultaDeDados">
             <table id="tblConsulta" >
                 <tr>
-                    <td id="tblTitulo" colspan="5">
+                    <td id="tblTitulo" colspan="6">
                         <h1> Consulta de Dados.</h1>
                     </td>
                 </tr>
@@ -177,6 +280,7 @@
                     <td class="tblColunas destaque"> Nome </td>
                     <td class="tblColunas destaque"> Celular </td>
                     <td class="tblColunas destaque"> Email </td>
+                    <td class="tblColunas destaque"> Foto </td>
                     <td class="tblColunas destaque"> Opções </td>
                 </tr>
                 <?php
@@ -189,6 +293,7 @@
                     <td class="tblColunas registros"><?=$rsClientes['nome']?></td>
                     <td class="tblColunas registros"><?=$rsClientes['celular']?></td>
                     <td class="tblColunas registros"><?=$rsClientes['email']?></td>
+                    <td class="tblColunas registros"><img class= "foto"src="<?= NOME_DIRETORIO_FILE.$rsClientes['foto']?>"></td>
                     <td class="tblColunas registros">
                         <a href="controles/editaDadosClientes.php?id=<?=$rsClientes['idcliente']?>">
                           <img src="img/edit.png" alt="Editar" title="Editar" class="editar"> 
@@ -199,7 +304,7 @@
                             <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
                         </a>   
                         
-                        <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">
+                        <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar" data-id="<?=$rsClientes['idcliente']?>">
                     </td>
                 </tr>
                 <?php  

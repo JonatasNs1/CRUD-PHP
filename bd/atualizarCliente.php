@@ -11,7 +11,7 @@
 //import do arquivo conexão com o banco de dados
 require_once('../bd/conexaoMysql.php');
 
-//update do cliente
+//update do cliente, 9 passo do tblEstado acrescenta o idEstado
 function editar($arrayCliente)
 {
     $sql = "update tblcliente set 
@@ -21,7 +21,8 @@ function editar($arrayCliente)
             telefone = '".$arrayCliente['telefone']."',
             celular= '".$arrayCliente['celular']."',
             email = '".$arrayCliente['email']."',
-            obs = '".$arrayCliente['obs']."'
+            obs = '".$arrayCliente['obs']."',
+             idEstado = ".$arrayCliente['idEstado']."
     
         where idcliente = ".$arrayCliente['id'];
     

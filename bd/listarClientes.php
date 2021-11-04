@@ -33,8 +33,11 @@ require_once(SRC.'bd/conexaoMysql.php');
     function buscar($idCliente)
     {
         //script
-        $sql = "select * from tblcliente
-                    where idcliente = ".$idCliente;
+        $sql = "select tblcliente.*, tblEstado.sigla
+                from tblcliente
+	               inner join tblEstado
+                    on tblEstado.idEstado = tblcliente.idEstado
+                where tblcliente.idcliente = ".$idCliente; //9 passo, arrumar o select, retorna a sigla do estado
         
         
          //abre a conexão com o banco de dados
