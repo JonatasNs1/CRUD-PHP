@@ -236,3 +236,17 @@ input[type=email]:hover{
     width: 80px;
     height: 80px;
 }
+
+#visualizarFoto{
+    width: 150px;
+    height: 70px;
+    position: relative;
+   right: 50px;
+   top:-5px;
+    /* background-color: aqua; */
+}
+
+#visualizarFoto img{
+    width: inherit;
+    height: inherit;
+}

@@ -14,6 +14,7 @@
     //variaveis para trazer os valores do Estado para a edição
     $idEstado = (int) null; //10 passo do tblEstado
     $sigla = (string) "Selecione um Item"; //11 passo do tblEstado
+    $foto = (string) null;//2 passo para exibir a foto na hora do editar
 
     // essa variavel $modo(modo salvar, modo atualizar) sera utilizada para definir o modo de manipulação com o banco de dados
     //(se ela for salvar= sera feito o insert
@@ -45,6 +46,7 @@
       $obs = $_SESSION['cliente']['obs'];
       $idEstado = $_SESSION['cliente']['idEstado'];//11 passo do tblEstado
       $sigla = $_SESSION['cliente'] ['sigla'];//12 passo do tblEstado
+      $foto = $_SESSION['cliente'] ['foto']; //1 passo para exibir a foto na hora do editar
       $modo = "Atualizar"; 
       
       //elimina um objeto, variavel da memoria edidar daados
@@ -154,9 +156,11 @@
                 -->
 
                 <!-- 2 passo enctype="multipart/form-data" - é obrigatório ser utilizado quando for trabalhar com imagens
-                        obs: (Para trabalhar com a input type="file") é obrigatório utilizar o metódo POST
+                        obs: (Para trabalhar com a input type="file") é obrigatório utilizar o metodo POST
+                      foto-  essa variavel foto começa como nulo e começa ter alguma coisa quando passa pelo editar
+                        
                 -->
-                <form enctype="multipart/form-data" action="controles/recebeDadosClientes.php?modo=<?=$modo?>&id=<?=$id?>" name="frmCadastro" method="post" >
+                <form enctype="multipart/form-data" action="controles/recebeDadosClientes.php?modo=<?=$modo?>&id=<?=$id?>&nomeFoto=<?=$foto?>" name="frmCadastro" method="post" >
                    
                    
                     
@@ -176,6 +180,10 @@
                         </div>
                         <div class="cadastroEntradaDeDados">
                             <input type="file" name="fleFoto" accept="image/jpeg, image/jpg, image/png">
+                        </div>
+                        <div id="visualizarFoto">  <!--3 passo para exibir a foto na hora do editar, esse (nome ) é o caminho -->
+                            <img src="<?= NOME_DIRETORIO_FILE.$foto?>"> 
+
                         </div>
                     </div>
                     
@@ -300,7 +308,7 @@
                         </a>
                       
                         
-                       <a onclick="return confirm('Tem certeza que deseja excluir?');" href="controles/excluiDadosClientes.php?id=<?=$rsClientes['idcliente']?>"> 
+                       <a onclick="return confirm('Tem certeza que deseja excluir?');" href="controles/excluiDadosClientes.php?id=<?=$rsClientes['idcliente']?> &foto=<?=$rsClientes['foto']?>"> 
                             <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
                         </a>   
                         

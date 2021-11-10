@@ -52,9 +52,20 @@ require_once(SRC.'functions/upload.php');
         $email = $_POST['txtEmail'];
         $obs = $_POST['txtObs'];
         $idEstado = $_POST['sltEstado']; //6 passo para o tbl estado
+
+        $nomeFoto = $_GET['nomeFoto']; // objetivo do  $nomeFoto = esse nome está chegando atraves do action do form, o motivo desta variavel é para concluir o editar com o upload de fotos
         // var_dump($_FILES['fleFoto']); //teste
 
-        $foto = uploadFile($_FILES['fleFoto']); // chamando a função que faz o upload de um arquivo
+        if(strtoupper($_GET['modo']) == 'ATUALIZAR')
+        {
+            if($_FILES['fleFoto'] ['name'] != "")
+            {
+                 $foto = uploadFile($_FILES['fleFoto']); // chamando a função que faz o upload de um arquivo
+            }else{
+                $foto = $nomeFoto;
+            }
+        }
+        // $foto = uploadFile($_FILES['fleFoto']); // chamando a função que faz o upload de um arquivo
         // echo($foto);
         // die;
        

@@ -10,7 +10,7 @@
     //Recebe o id enviado pelo ajax na pagina da index
     $id =$_GET['id'];
 //    echo($id);
-
+    $foto= $_GET['foto'];
 
     //  chama a funcao para buscar no banco de dados
     $dadosCliente = visualizarCliente($id);
@@ -65,6 +65,11 @@
             <tr>
                 <td> OBS:</td>
                 <td><?=$dadosCliente['obs']?></td>
+            </tr>
+
+            <tr>
+                <td> Imagem:</td>
+                <td><?=$dadosCliente['foto']?></td>
             </tr>
             
             
