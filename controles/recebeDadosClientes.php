@@ -58,13 +58,17 @@ require_once(SRC.'functions/upload.php');
 
         if(strtoupper($_GET['modo']) == 'ATUALIZAR')
         {
-            if($_FILES['fleFoto'] ['name'] != "")
+            if($_FILES['fleFoto'] ['name'] != "") //tratamento para ver se a foto veio vazia
             {
                  $foto = uploadFile($_FILES['fleFoto']); // chamando a função que faz o upload de um arquivo
+                 unlink(SRC.NOME_DIRETORIO_FILE.$nomeFoto ); // unlink() -  Apaga a imagem antiga
             }else{
                 $foto = $nomeFoto;
             }
+        }else{ // esse else - caso a variavel modo seja "SALVAR", então será obrigatório o upload da foto
+            $foto = uploadFile($_FILES['fleFoto']); 
         }
+
         // $foto = uploadFile($_FILES['fleFoto']); // chamando a função que faz o upload de um arquivo
         // echo($foto);
         // die;

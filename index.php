@@ -14,7 +14,7 @@
     //variaveis para trazer os valores do Estado para a edição
     $idEstado = (int) null; //10 passo do tblEstado
     $sigla = (string) "Selecione um Item"; //11 passo do tblEstado
-    $foto = (string) null;//2 passo para exibir a foto na hora do editar
+    $foto = (string) "semFoto.png";//2 passo para exibir a foto na hora do editar
 
     // essa variavel $modo(modo salvar, modo atualizar) sera utilizada para definir o modo de manipulação com o banco de dados
     //(se ela for salvar= sera feito o insert
