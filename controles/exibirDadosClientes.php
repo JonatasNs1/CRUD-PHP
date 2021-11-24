@@ -18,6 +18,17 @@ require_once(SRC . 'bd/listarClientes.php');
         
     }
 
+    // função para buscar dados do banco de dados (CMS/API)
+    function buscarClientes($id)
+    {
+        //chama a função que busca os dados no bd e recebe os registros de clientes, isso é para resgatar o id e mandar la para o endpoint
+       $dados = buscar($id);
+        
+        return $dados;
+        
+        
+    }
+
     //Função para criar um array de dados com base no retorno do Banco de dados
     function criarArray($objeto)
     {
