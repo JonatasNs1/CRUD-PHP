@@ -20,7 +20,10 @@ require_once('../bd/conexaoMysql.php');
         
         // 5 passo- quem é o banco de dados, quem é o script q vai mandar pro banco de dados - mysqli_query só retorna verdadeiro e falso
        if(mysqli_query($conexao, $sql))
-           return true;
+            if(mysqli_affected_rows($conexao))
+                return true;
+            else
+                return false;
        else
            return false;
        
