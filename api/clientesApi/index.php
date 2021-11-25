@@ -129,11 +129,57 @@
       
     });
 
-    $app->put('/clientes', function($request, $response, $args){ //Endpoint: PUT, atualiza um cliente no BD
 
-        return $response   ->withStatus(201) 
-                           ->withHeader('Content-Type', 'application/json') 
-                           ->write('{"message":"Item Atualizado com sucesso"}'); 
+    $app->put('/clientes/{id}', function($request, $response, $args){ //Endpoint: PUT, atualiza um cliente no BD, tem dois caminhos encaminhar o put normal recebendo o id por argumento 
+                                                                //ou onde a pessoa encaminhar vai mandar por dentro do json ou pelo id
+
+          $contentType = $request-> getHeaderLine('Content-Type'); // recebe o content type do header, para verificar se o padrao do body será json();
+        // echo($contentType); // 2 passo teste
+        // die;
+
+        //3 passo, valida se o tipo de dados é JSON()
+        if($contentType == 'application/json'){ // se o content type é json
+
+            // 4 passo recebe o conteudo enviado no body da mensagem
+            $dadosBodyJSON = $request-> getParsedBody(); //método que vai trazer o body
+
+            
+            
+            //valida se o corpo do body está vazio
+            if( $dadosBodyJSON == "" || $dadosBodyJSON == null || !isset($args['id']) || !is_numeric($args['id']) ) //5 passo
+            {
+                return $response    ->withStatus(406)
+                                    ->withHeader('Content-Type', 'application/json')
+                                     ->write('{"message":"Conteudo enviado pelo body não contem dados validos"}');
+            }else
+            {
+                // var_dump($dadosBodyJSON);
+                // die;
+                $id = $args['id']; // recebe o id que será enviado pela URL
+
+                require_once('../controles/recebeDadosClientesAPI.php'); // 6 passo, import do arquivo que vai encaminhar os dados para o banco de dados
+                //inserirClienteAPI($dadosBodyJSON) chamando a função
+                //envia os dados para o BD e valida se foi inserido com sucesso
+                if(atualizarClienteAPI($dadosBodyJSON,$id)){ //7 passo
+                    return $response    ->withStatus(200)
+                                        ->withHeader('Content-Type', 'application/json')
+                                        ->write('{"message":"Item atualizado com sucesso"}');
+                }else{
+                    return $response    ->withStatus(400)
+                                        ->withHeader('Content-Type', 'application/json')
+                                        ->write('{"message":"Não foi possível salvar os dados, por favor conferir o body da mensagem"}');
+                }
+              
+            }
+
+        
+        }else
+        {
+            return $response    ->withStatus(406)
+                                ->withHeader('Content-Type', 'application/json')
+                                ->write('{"message":"Formato de dados do header incompatível com o padrão json"}');
+        }
+      
     });
 
     $app->delete('/clientes', function($request, $response, $args){ //Endpoint:DELETE, exclui um cliente no BD
