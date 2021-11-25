@@ -181,12 +181,39 @@
         }
       
     });
+    
 
-    $app->delete('/clientes', function($request, $response, $args){ //Endpoint:DELETE, exclui um cliente no BD
+    $app->delete('/clientes/{id}', function($request, $response, $args){ //Endpoint:DELETE, exclui um cliente no BD
+       
+            
+            if(!isset($args['id']) || !is_numeric($args['id']) ) //5 passo
+            {
+                return $response    ->withStatus(406)
+                                    ->withHeader('Content-Type', 'application/json')
+                                     ->write('{"message":"Não foi encaminhado um ID do registro."}');
+            }else
+            {
+                $id = $args['id']; // recebe o id enviado pela URL
+                //import do arquivo de exclusão
 
-        return $response   ->withStatus(200) 
-                           ->withHeader('Content-Type', 'application/json')
-                           ->write('{"message":"Item excluido com sucesso"}'); 
+                require_once('../controles/excluirDadosClientesAPI.php');
+              // 6 passo, import do arquivo que vai encaminhar os dados para o banco de dados
+                //inserirClienteAPI($dadosBodyJSON) chamando a função
+                //envia os dados para o BD e valida se foi inserido com sucesso
+                if(excluirClienteAPI($id)){ //7 passo
+                    return $response    ->withStatus(200)
+                                        ->withHeader('Content-Type', 'application/json')
+                                        ->write('{"message":"Item excluido com sucesso"}');
+                }else{
+                    return $response    ->withStatus(400)
+                                        ->withHeader('Content-Type', 'application/json')
+                                        ->write('{"message":"Não foi possível excluir os dados"}');
+                }
+              
+            }
+
+      
+      
     });
 
     $app->run(); // 9 passo colocar na memória, carrega todos os EndPoint para execução

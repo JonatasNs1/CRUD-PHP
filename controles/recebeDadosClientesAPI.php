@@ -12,6 +12,7 @@ require_once('../functions/config.php');
 require_once(SRC.'bd/inserirCliente.php');
 require_once(SRC.'bd/atualizarCliente.php');
 
+
 function inserirClienteAPI($arrayDados) //função para inserir dados no Banco via Post da API
 {
         // fazer tratamento de dados para consistencia, caixa vazia, tamanho de caracter etc...
@@ -46,6 +47,23 @@ function atualizarClienteAPI($arrayDados, $id) //função para atualizar dados n
     
 
 }
+
+
+// function excluirClienteAPI($id) //função para atualizar dados no Banco via PUT da API
+// {
+
+//         // fazer tratamento de dados para consistencia, caixa vazia, tamanho de caracter etc...
+//     if(excluir($id)){ //recebo o array e chamo a função editar do arquivo atualizarCliente.php
+//          return true;
+     
+//     }else{
+//         return false;
+        
+//     }
+       
+    
+
+// }
 
 
 ?>
