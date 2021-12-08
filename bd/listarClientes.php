@@ -54,5 +54,27 @@ require_once(SRC.'bd/conexaoMysql.php');
     return $select;
         
     }
+
+
+
+    //função que retorna a lista de registros com filtro pelo nome do cliente
+    function buscarNome($nome){
+         //script
+         $sql = "select tblcliente.*, tblEstado.sigla
+         from tblcliente
+            inner join tblEstado
+             on tblEstado.idEstado = tblcliente.idEstado
+         where tblcliente.nome like '%".$nome."%'"; //9 passo, arrumar o select, retorna a sigla do estado, like no lugar do =
+ 
+ 
+    //abre a conexão com o banco de dados
+    $conexao = conexaoMysql();
+
+        // solicita ao banco de dados a execução do script SQL
+    //criando uma variavel para receber os dados do bd
+    $select =  mysqli_query($conexao, $sql);
+
+    return $select;
+    }
    
 ?>

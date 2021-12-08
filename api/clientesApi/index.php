@@ -20,18 +20,38 @@
     // request - será usado para pegar algo que vai ser enviado para pegar API(recebe), parametros da api
     // response - será utilizado para quando a API irá devolver algo, seja uma mensagem, status, body, header, etc (devolve)
     // args - será os argumentos que podem ser encaminhados para a API, parametros são variaveis que são criadas na api
+
+
+
     $app->get('/clientes', function($request, $response, $args){ // 5 passo, Endpoint: GET, retorna todos dados de clientes
-        
+        //auteraçaõ para a api responder de outras formas, query string(?variavel e )
+
+        if(isset( $request ->getQueryParams()['nome'])) //vendo se existe esse parametro nome, se teve a existencia da chegada de dados, parametro para filtrar pelo nome
+        {
+
+        /************** Recebendo dados pela query string */
+            $nome = (string) null;
+            $nome = $request ->getQueryParams()['nome']; //getQueryParams()-é um método do slim que responde por parametro, os nomes da variavel que vc quer receber
+
+            if($listDados = buscarNomeClientes($nome)){
+
+                    if( $listDadosArray = criarArray($listDados)){  
+                             $listDadosJSON = criarJSON($listDadosArray);
+                    }
+            }
+            /* **************************************************/
+        }else{
        
         // 10 passo, chama a função(Na pasta controles) que vai requisitar os dados no Banco de Dados, uma que vai gerar o array e outra que vai gerar um json
-        if($listDados = exibirClientes()){
+            if($listDados = exibirClientes()){
             //var_dump($listDados); teste para ver se foi 
             //die;
                 if( $listDadosArray = criarArray($listDados)){  // criar um array para os dados que estão chegando
-                         $listDadosJSON = criarJSON($listDadosArray);
+                         $listDadosJSON = criarJSON($listDadosArray); //criar o JSON
                 }
-        } 
-       
+            } 
+        }
+
         //Validação para tratar o banco de dados sem conteúdo, (vazio), para testar se ta funcionando é só ir la no crud e excluir, ele tem que aparecer no postaman que ta vazio, e mensagem
         if( $listDadosArray){ //if para ver se tem dados no banco
             return $response   ->withStatus(200) // qual é o status que eu vou devolver desse EndPoint, response é como se fosse o echo() //6 passo
@@ -46,6 +66,7 @@
      
 
     });
+
 
     $app->get('/clientes/{id}', function($request, $response, $args){ // 5 passo, Endpoint: GET, retorna um cliente pelo id, o que vier após a segunda /, ficara armazenada na variavel id
         // sempre que passar algo para url, vai chegar como args exemplo(/clientes/id), args vai trazer o argumento, ele faz uma associação da palavra que vc coloca dentro das {}, nome, id
@@ -217,4 +238,11 @@
     });
 
     $app->run(); // 9 passo colocar na memória, carrega todos os EndPoint para execução
+
+
+
+
+
+    // postaman 
+    //http://localhost/ds2t20212/jonatas/crud/api/clientes?nome=Afonsinho para buscar pelo query string
 ?>

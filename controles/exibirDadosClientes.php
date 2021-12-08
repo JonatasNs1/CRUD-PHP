@@ -29,6 +29,15 @@ require_once(SRC . 'bd/listarClientes.php');
         
     }
 
+
+    //função criada para o query string, para buscar pelo nome
+    //função para buscar dados no banco de dados com filtro pelo nome (API)
+    function buscarNomeClientes($nome){
+        $dados = buscarNome($nome);
+
+        return $dados;
+    }
+
     //Função para criar um array de dados com base no retorno do Banco de dados
     function criarArray($objeto)
     {
